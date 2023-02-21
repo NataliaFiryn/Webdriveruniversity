@@ -3,8 +3,10 @@ firstNameField = '[name="first_name"]'
 lastNameField = '[name="last_name"]'
 emailField = '[name="email"]'
 commentField = '[name="message"]'
-submitButton = '[type="submit"]'
-resetButton = '[type="reset"]'
+submitButton = '#form_buttons [type="submit"]'
+resetButton = '#form_buttons [type="reset"]'
+errorMessageBody = 'body'
+submitedMessegeBody = '#contact_reply'
 
     fillUpContactUsForm(firstName,lastName, email, comment){
         cy.get('form').then(form => {
@@ -15,9 +17,7 @@ resetButton = '[type="reset"]'
           })
     }
     resetEnteredDataAndCheckContactUsForm(){
-        cy.get('#contact_form').find('#form_buttons').then(buttons => {
-            cy.get(onFormContactUs.resetButton).click()
-        })
+        cy.get(onFormContactUs.resetButton).click()
         cy.get('form').then(form => {
             cy.get(onFormContactUs.firstNameField).should('have.value', '')
             cy.get(onFormContactUs.lastNameField).should('have.value', '')
@@ -27,18 +27,16 @@ resetButton = '[type="reset"]'
         
     }
     submitForm(){
-        cy.get('#contact_form').find('#form_buttons').then(buttons => {
-            cy.get(onFormContactUs.submitButton).click()
-        })
+        cy.get(onFormContactUs.submitButton).click()
     }
     errorMessageAllFieldsRequired(){
-        cy.get('body').should('contain', 'Error: all fields are required')
+        cy.get(onFormContactUs.errorMessageBody).should('contain', 'Error: all fields are required')
     }
     errorMessageInvalidEmail(){
-        cy.get('body').should('contain', 'Error: Invalid email address')
+        cy.get(onFormContactUs.errorMessageBody).should('contain', 'Error: Invalid email address')
     }
     messageFormSubmitedCorrect(){
-        cy.get('body').find('#contact_reply').should('contain', 'Thank You for your Message!')
+        cy.get(onFormContactUs.submitedMessegeBody).should('contain', 'Thank You for your Message!')
     }
 }
 export const onFormContactUs = new FormContactUsPage
